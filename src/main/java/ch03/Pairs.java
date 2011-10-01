@@ -21,47 +21,44 @@ import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
 public class Pairs extends Configured implements Tool {
-	
-	
-	public static class PairsMapper extends MapReduceBase implements Mapper<LongWritable, Text, TextPair, IntWritable> {
-		
+
+	public static class PairsMapper extends MapReduceBase implements
+			Mapper<LongWritable, Text, TextPair, IntWritable> {
+
 		private final static IntWritable one = new IntWritable(1);
-		
-		private Text word = new Text();
 
 		@Override
 		public void map(LongWritable key, Text value,
 				OutputCollector<TextPair, IntWritable> output, Reporter reporter)
 				throws IOException {
 			String line = value.toString();
-			String[] words = line.split( "\\s+" );
+			String[] words = line.split("\\s+");
 
-			for ( String word : words ) {
-				for ( String term : words ) {
-					if(!word.equals(term)) {
-						output.collect(new TextPair(word, term), one);
+			for (String first : words) {
+				for (String second : words) {
+					if (!first.equals(second)) {
+						output.collect(new TextPair(first, second), one);
 					}
 				}
 			}
 		}
 	}
-	
-	public static class PairsReducer extends MapReduceBase implements Reducer<TextPair, IntWritable, TextPair, IntWritable> {
+
+	public static class PairsReducer extends MapReduceBase implements
+			Reducer<TextPair, IntWritable, TextPair, IntWritable> {
 
 		@Override
 		public void reduce(TextPair key, Iterator<IntWritable> values,
 				OutputCollector<TextPair, IntWritable> output, Reporter reporter)
 				throws IOException {
 			int sum = 0;
-			while(values.hasNext()) {
+			while (values.hasNext()) {
 				sum += values.next().get();
 			}
 			output.collect(key, new IntWritable(sum));
 		}
 	}
 
-	
-	
 	public static void main(String[] args) throws Exception {
 		int exitCode = ToolRunner.run(new Pairs(), args);
 		System.exit(exitCode);
