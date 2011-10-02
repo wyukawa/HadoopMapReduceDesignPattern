@@ -24,7 +24,7 @@ import org.apache.hadoop.util.ToolRunner;
 
 public class Stripes extends Configured implements Tool {
 
-	public static class StripseMapper extends MapReduceBase implements
+	public static class StripesMapper extends MapReduceBase implements
 			Mapper<LongWritable, Text, Text, MapWritable> {
 
 		@Override
@@ -49,7 +49,7 @@ public class Stripes extends Configured implements Tool {
 		}
 	}
 
-	public static class StripseReducer extends MapReduceBase implements
+	public static class StripesReducer extends MapReduceBase implements
 			Reducer<Text, MapWritable, TextPair, IntWritable> {
 
 		@Override
@@ -84,8 +84,8 @@ public class Stripes extends Configured implements Tool {
 	public int run(String[] args) throws Exception {
 		JobConf conf = new JobConf(getConf(), getClass());
 		conf.setJobName("Stripse");
-		conf.setMapperClass(StripseMapper.class);
-		conf.setReducerClass(StripseReducer.class);
+		conf.setMapperClass(StripesMapper.class);
+		conf.setReducerClass(StripesReducer.class);
 		conf.setMapOutputKeyClass(Text.class);
 		conf.setMapOutputValueClass(MapWritable.class);
 		conf.setOutputKeyClass(TextPair.class);
