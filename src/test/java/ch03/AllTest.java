@@ -16,16 +16,34 @@ import org.apache.hadoop.mapred.OutputLogFilter;
 import org.junit.Test;
 
 
-public class StripseTest {
+public class AllTest {
 
 	@Test
-	public void testRun() throws Exception {
+	public void testPairs() throws Exception {
 		JobConf conf = new JobConf();
-		conf.set("fs.default.name", "file:///");
-		conf.set("mapred.job.tracker", "local");
 
 		Path input = new Path(System.getProperty("user.dir")
-				+ "/src/test/resources/ch03/Stripse/input");
+				+ "/src/test/resources/ch03/input.txt");
+		Path output = new Path("output");
+
+		FileSystem fs = FileSystem.getLocal(conf);
+		fs.delete(output);
+
+		Pairs driver = new Pairs();
+		driver.setConf(conf);
+
+		int exitCode = driver.run(new String[] { input.toString(), output.toString() });
+		assertThat(exitCode, is(0));
+
+		checkOutput(conf, output);
+	}
+	
+	@Test
+	public void testStripse() throws Exception {
+		JobConf conf = new JobConf();
+
+		Path input = new Path(System.getProperty("user.dir")
+				+ "/src/test/resources/ch03/input.txt");
 		Path output = new Path("output");
 
 		FileSystem fs = FileSystem.getLocal(conf);
@@ -47,7 +65,7 @@ public class StripseTest {
 		assertThat(outputFiles.length, is(1));
 
 		BufferedReader actual = asBufferedReader(fs.open(outputFiles[0]));
-		BufferedReader expected = asBufferedReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("ch03/Stripse/expected.txt"));
+		BufferedReader expected = asBufferedReader(Thread.currentThread().getContextClassLoader().getResourceAsStream("ch03/expected.txt"));
 		String expectedLine;
 		while ((expectedLine = expected.readLine()) != null) {
 			assertThat(actual.readLine(), is(expectedLine));
