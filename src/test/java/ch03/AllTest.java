@@ -39,7 +39,7 @@ public class AllTest {
 	}
 	
 	@Test
-	public void testStripse() throws Exception {
+	public void testStripes() throws Exception {
 		JobConf conf = new JobConf();
 
 		Path input = new Path(System.getProperty("user.dir")
@@ -49,7 +49,7 @@ public class AllTest {
 		FileSystem fs = FileSystem.getLocal(conf);
 		fs.delete(output);
 
-		Stripse driver = new Stripse();
+		Stripes driver = new Stripes();
 		driver.setConf(conf);
 
 		int exitCode = driver.run(new String[] { input.toString(), output.toString() });

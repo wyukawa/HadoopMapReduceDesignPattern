@@ -22,7 +22,7 @@ import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
 
-public class Stripse extends Configured implements Tool {
+public class Stripes extends Configured implements Tool {
 
 	public static class StripseMapper extends MapReduceBase implements
 			Mapper<LongWritable, Text, Text, MapWritable> {
@@ -76,7 +76,7 @@ public class Stripse extends Configured implements Tool {
 	}
 
 	public static void main(String[] args) throws Exception {
-		int exitCode = ToolRunner.run(new Stripse(), args);
+		int exitCode = ToolRunner.run(new Stripes(), args);
 		System.exit(exitCode);
 	}
 
